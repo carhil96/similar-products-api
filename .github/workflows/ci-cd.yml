@@ -18,10 +18,9 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-          cache: maven
 
       - name: Build project with Maven
-        run: mvn -B clean package -DskipTests
+        run: mvn clean package -DskipTests
 
       - name: Build Docker image
         run: docker build -t springboot_app .
@@ -29,7 +28,15 @@ jobs:
       - name: Run container
         run: |
           docker run -d --name your_app -p 5001:5001 springboot_app
-          sleep 15  
+          echo "Esperando a que la app arranque..."
+          for i in {1..30}; do
+            if curl -sSf http://localhost:5001/actuator/health > /dev/null; then
+              echo "✅ App lista en intento $i"
+              break
+            fi
+            echo "⏳ Esperando... intento $i"
+            sleep 5
+          done
 
       - name: Fetch OpenAPI spec
         run: |
@@ -37,11 +44,14 @@ jobs:
           curl -sSf http://localhost:5001/v3/api-docs -o openapi/openapi.json
 
       - name: Stop container
-        if: always()
-        run: docker stop your_app && docker rm your_app
+        run: docker stop your_app
 
       - name: Upload OpenAPI artifact
         uses: actions/upload-artifact@v4
         with:
           name: openapi-json
           path: openapi/openapi.json
+
+      - name: Show container logs (debug if failed)
+        if: failure()
+        run: docker logs your_app
