@@ -13,10 +13,8 @@ class ProductControllerTest {
 
     @Test
     void testGetSimilarProducts() {
-        // Mock del servicio
         GetSimilarProductsService serviceMock = Mockito.mock(GetSimilarProductsService.class);
 
-        // Retorna un Flux en lugar de una List
         Flux<ProductDetail> mockFlux = Flux.just(
                 new ProductDetail("1", "Shirt", 9.99, true),
                 new ProductDetail("2", "Dress", 19.99, true)
@@ -24,10 +22,8 @@ class ProductControllerTest {
 
         Mockito.when(serviceMock.execute("1")).thenReturn(mockFlux);
 
-        // Configuración de WebTestClient
         WebTestClient client = WebTestClient.bindToController(new ProductController(serviceMock)).build();
 
-        // Test de la API
         client.get()
                 .uri("/product/1/similar")
                 .accept(MediaType.APPLICATION_JSON)

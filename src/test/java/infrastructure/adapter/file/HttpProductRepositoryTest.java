@@ -21,7 +21,6 @@ class HttpProductRepositoryTest {
         ExchangeFunction exchangeFunction = request -> {
             String path = request.url().getPath();
 
-            // Mock similarids
             if (path.equals("/product/1/similarids")) {
                 return Mono.just(ClientResponse.create(HttpStatusCode.valueOf(200))
                         .header("Content-Type", "application/json")
@@ -29,7 +28,6 @@ class HttpProductRepositoryTest {
                         .build());
             }
 
-            // Mock detalles de productos
             if (path.equals("/product/2")) {
                 return Mono.just(ClientResponse.create(HttpStatusCode.valueOf(200))
                         .header("Content-Type", "application/json")
@@ -37,11 +35,9 @@ class HttpProductRepositoryTest {
                         .build());
             }
             if (path.equals("/product/3")) {
-                // Error 500 → placeholder
                 return Mono.error(new RuntimeException("500 Internal Server Error"));
             }
 
-            // Default 404
             return Mono.just(ClientResponse.create(HttpStatusCode.valueOf(404)).build());
         };
 

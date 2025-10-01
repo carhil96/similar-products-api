@@ -26,7 +26,7 @@ public class HttpProductRepository implements ProductRepositoryPort {
     @Override
     public Flux<ProductDetail> findSimilarProducts(String productId) {
 
-        // 1️⃣ Obtener IDs de productos similares como Mono<List<String>>
+
         return webClient.get()
                 .uri("/product/{productId}/similarids", productId)
                 .retrieve()
