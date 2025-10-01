@@ -9,23 +9,19 @@ jobs:
   build-and-openapi:
     runs-on: ubuntu-latest
 
-    services:
-      docker:
-        image: docker:20.10.24
-        options: --privileged
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
+          cache: maven
 
       - name: Build project with Maven
-        run: mvn clean package -DskipTests
+        run: mvn -B clean package -DskipTests
 
       - name: Build Docker image
         run: docker build -t springboot_app .
@@ -41,10 +37,11 @@ jobs:
           curl -sSf http://localhost:5001/v3/api-docs -o openapi/openapi.json
 
       - name: Stop container
-        run: docker stop your_app
+        if: always()
+        run: docker stop your_app && docker rm your_app
 
       - name: Upload OpenAPI artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: openapi-json
           path: openapi/openapi.json
