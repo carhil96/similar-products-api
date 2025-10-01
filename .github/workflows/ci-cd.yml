@@ -28,15 +28,23 @@ jobs:
       - name: Run container
         run: |
           docker run -d --name your_app -p 5001:5001 springboot_app
-          echo "Esperando a que la app arranque..."
+
+
+      - name: Wait for container to be healthy
+        run: |
+          echo "Esperando a que la app esté lista..."
           for i in {1..30}; do
-            if curl -sSf http://localhost:5001/actuator/health > /dev/null; then
-              echo "✅ App lista en intento $i"
-              break
+            status=$(docker inspect --format='{{.State.Health.Status}}' your_app)
+            if [ "$status" = "healthy" ]; then
+              echo "container ready"
+              exit 0
             fi
-            echo "⏳ Esperando... intento $i"
+            echo "⏳ Estado: $status (intentando $i/30)"
             sleep 5
           done
+          echo "container healthy"
+          docker logs your_app
+          exit 1
 
       - name: Fetch OpenAPI spec
         run: |
@@ -51,7 +59,3 @@ jobs:
         with:
           name: openapi-json
           path: openapi/openapi.json
-
-      - name: Show container logs (debug if failed)
-        if: failure()
-        run: docker logs your_app
