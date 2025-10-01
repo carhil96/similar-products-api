@@ -6,10 +6,8 @@ services:
     image: springboot_app
     container_name: springboot_app
     platform: linux/amd64
-    environment:
-      - APP_PORT=${APP_PORT}
     ports:
-      - "${APP_PORT}:5001"
+      - "5001:5001"
     restart: unless-stopped
     networks:
       - simulado-network

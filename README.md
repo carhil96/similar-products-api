@@ -1,4 +1,4 @@
-# SimilarProducts API - Backend Technical Test
+# SimilarProducts API
 
 REST API to retrieve similar products for a given product. This project is part of a backend technical test to evaluate code clarity, maintainability, performance, and resilience.
 
@@ -109,7 +109,7 @@ Results are stored in InfluxDB and can be visualized in Grafana.
 ### http://localhost:3000/d/Le2Ku9NMk/k6-performance-test
 
 ---
-## Tecnology Task
+## Technology Stack
 
 | Category                 | Technology / Library                       |
 | ------------------------ | ------------------------------------------ |
