@@ -33,18 +33,16 @@ jobs:
       - name: Wait for container to be healthy
         run: |
           echo "Waiting to app ready..."
-          for i in {1..60}; do
-            status=$(docker inspect --format='{{.State.Health.Status}}' your_app)
-            if [ "$status" = "healthy" ]; then
-              echo "container ready"
+          for i in {1..30}; do
+            if curl -sSf http://localhost:5001/actuator/health; then
+              echo "App ready"
               exit 0
-            fi
-            echo "Estado: $status (trying $i/60)"
-            sleep 5
-          done
-          echo "container healthy"
-          docker logs your_app
-          exit 1
+              fi
+              echo "⏳ Esperando... intento $i/30"
+              sleep 5
+            done
+            docker logs your_app
+            exit 1
 
       - name: Fetch OpenAPI spec
         run: |
