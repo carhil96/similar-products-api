@@ -21,24 +21,19 @@ class HttpProductRepositoryTest {
         ExchangeFunction exchangeFunction = request -> {
             String path = request.url().getPath();
 
-            if (path.equals("/product/1/similarids")) {
-                return Mono.just(ClientResponse.create(HttpStatusCode.valueOf(200))
+            return switch (path) {
+                case "/product/1/similarids" -> Mono.just(ClientResponse.create(HttpStatusCode.valueOf(200))
                         .header("Content-Type", "application/json")
                         .body("[2,3]")
                         .build());
-            }
-
-            if (path.equals("/product/2")) {
-                return Mono.just(ClientResponse.create(HttpStatusCode.valueOf(200))
+                case "/product/2" -> Mono.just(ClientResponse.create(HttpStatusCode.valueOf(200))
                         .header("Content-Type", "application/json")
                         .body("{\"id\":\"2\",\"name\":\"Dress\",\"price\":19.99,\"availability\":true}")
                         .build());
-            }
-            if (path.equals("/product/3")) {
-                return Mono.error(new RuntimeException("500 Internal Server Error"));
-            }
+                case "/product/3" -> Mono.error(new RuntimeException("500 Internal Server Error"));
+                default -> Mono.just(ClientResponse.create(HttpStatusCode.valueOf(404)).build());
+            };
 
-            return Mono.just(ClientResponse.create(HttpStatusCode.valueOf(404)).build());
         };
 
         WebClient webClient = WebClient.builder()
