@@ -2,7 +2,7 @@ name: Spring Boot CI/CD with OpenAPI Artifact
 
 on:
   push:
-    branches: [master]
+    branches: [ master ]
   pull_request:
 
 jobs:
