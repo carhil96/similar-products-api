@@ -1,8 +1,8 @@
 package com.example.similarproducts.domain.port;
 
-import com.example.similarproducts.domain.model.Product;
-import java.util.List;
+import com.example.similarproducts.domain.model.ProductDetail;
+import reactor.core.publisher.Flux;
 
 public interface ProductRepositoryPort {
-    List<Product> findSimilarProducts(String productId);
+    Flux<ProductDetail> findSimilarProducts(String productId);
 }

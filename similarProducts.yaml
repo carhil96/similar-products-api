@@ -7,35 +7,78 @@ servers:
 paths:
   '/product/{productId}/similar':
     parameters:
-      - schema:
-          type: string
-        name: productId
+      - name: productId
         in: path
         required: true
+        schema:
+          type: string
     get:
       operationId: get-product-similar
-      summary: Similar products
+      summary: Get similar products for a given product
       responses:
         '200':
-          description: OK
+          description: OK - List of similar products
           content:
             application/json:
               schema:
-                 $ref: '#/components/schemas/SimilarProducts'
+                $ref: '#/components/schemas/SimilarProductsResponse'
+              examples:
+                example-success:
+                  summary: "Ejemplo de productos similares"
+                  value:
+                    SimilarProducts:
+                      - id: "2"
+                        name: "Dress"
+                        price: 19.99
+                        availability: true
+                      - id: "3"
+                        name: "Blazer"
+                        price: 29.99
+                        availability: false
+                      - id: "4"
+                        name: "Boots"
+                        price: 39.99
+                        availability: true
         '404':
-          description: Product Not found
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                example-404:
+                  summary: "Product not found"
+                  value:
+                    message: "Product not found"
+        '500':
+          description: Internal server error or external service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                example-500:
+                  summary: "Internal error"
+                  value:
+                    message: "Internal error when retrieving similar products"
 components:
   schemas:
-    SimilarProducts:
-      type: array
-      description: 'List of similar products to a given one ordered by similarity'
-      minItems: 0
-      uniqueItems: true
-      items:
-        $ref: '#/components/schemas/ProductDetail'
-    ProductDetail:
-      description: 'Product detail'
+    SimilarProductsResponse:
       type: object
+      properties:
+        SimilarProducts:
+          type: array
+          description: List of similar products to a given one ordered by similarity
+          minItems: 0
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/ProductDetail'
+      required:
+        - SimilarProducts
+
+    ProductDetail:
+      type: object
+      description: Product detail
       properties:
         id:
           type: string
@@ -52,3 +95,11 @@ components:
         - name
         - price
         - availability
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message

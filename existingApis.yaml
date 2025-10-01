@@ -50,7 +50,7 @@ components:
       description: 'List of similar product Ids to a given one ordered by similarity'
       minItems: 0
       uniqueItems: true
-      items:
+      SimilarProducts:
         type: string
         example: ["1","2","3"]
     ProductDetail:

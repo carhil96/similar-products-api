@@ -1,19 +1,20 @@
 package com.example.similarproducts.application.service;
 
-import com.example.similarproducts.domain.model.Product;
+import com.example.similarproducts.domain.model.ProductDetail;
 import com.example.similarproducts.domain.port.ProductRepositoryPort;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
-import java.util.List;
-
+@Service
 public class GetSimilarProductsService {
 
-    private final ProductRepositoryPort repository;
+    private final ProductRepositoryPort productRepository;
 
-    public GetSimilarProductsService(ProductRepositoryPort repository) {
-        this.repository = repository;
+    public GetSimilarProductsService(ProductRepositoryPort productRepository) {
+        this.productRepository = productRepository;
     }
 
-    public List<Product> execute(String productId) {
-        return repository.findSimilarProducts(productId);
+    public Flux<ProductDetail> execute(String productId) {
+        return productRepository.findSimilarProducts(productId);
     }
 }

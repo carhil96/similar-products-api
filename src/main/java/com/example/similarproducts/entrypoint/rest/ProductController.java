@@ -1,11 +1,10 @@
 package com.example.similarproducts.entrypoint.rest;
 
 import com.example.similarproducts.application.service.GetSimilarProductsService;
-import com.example.similarproducts.domain.model.Product;
-import org.springframework.http.ResponseEntity;
+import com.example.similarproducts.domain.model.ProductDetail;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/product")
@@ -18,12 +17,8 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}/similar")
-    public ResponseEntity<List<Product>> getSimilarProducts(@PathVariable String productId) {
-        try {
-            List<Product> products = service.execute(productId);
-            return ResponseEntity.ok(products);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public Flux<ProductDetail> getSimilarProducts(@PathVariable String productId) {
+        return service.execute(productId);
     }
+
 }

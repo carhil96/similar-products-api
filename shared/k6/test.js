@@ -45,7 +45,7 @@ export let options = {
   }
 };
 
-const host = "http://host.docker.internal:5001";
+const host = "http://springboot_app:5001";
 
 export function normal() {
   http.get(host + "/product/1/similar");
