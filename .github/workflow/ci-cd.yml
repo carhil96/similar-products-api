@@ -1,0 +1,50 @@
+name: Spring Boot CI/CD with OpenAPI Artifact
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-and-openapi:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:20.10.24
+        options: --privileged
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Build project with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Build Docker image
+        run: docker build -t springboot_app .
+
+      - name: Run container
+        run: |
+          docker run -d --name your_app -p 5001:5001 springboot_app
+          sleep 15  # esperar a que la app arranque
+
+      - name: Fetch OpenAPI spec
+        run: |
+          mkdir -p openapi
+          curl -sSf http://localhost:5001/v3/api-docs -o openapi/openapi.json
+
+      - name: Stop container
+        run: docker stop your_app
+
+      - name: Upload OpenAPI artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: openapi-json
+          path: openapi/openapi.json
