@@ -2,7 +2,7 @@ name: Spring Boot CI/CD with OpenAPI Artifact
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
 
 jobs:
@@ -33,7 +33,7 @@ jobs:
       - name: Run container
         run: |
           docker run -d --name your_app -p 5001:5001 springboot_app
-          sleep 15  # esperar a que la app arranque
+          sleep 15  
 
       - name: Fetch OpenAPI spec
         run: |
