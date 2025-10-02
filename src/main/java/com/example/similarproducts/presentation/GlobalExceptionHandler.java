@@ -2,8 +2,7 @@ package com.example.similarproducts.presentation;
 
 import com.example.similarproducts.infrastructure.exception.ProductNotFoundException;
 import com.example.similarproducts.presentation.dto.ErrorResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Instant;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
 
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(ProductNotFoundException ex) {

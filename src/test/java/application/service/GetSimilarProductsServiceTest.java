@@ -6,6 +6,9 @@ import com.example.similarproducts.domain.port.ProductRepositoryPort;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -15,14 +18,16 @@ import static org.mockito.Mockito.*;
 
 class GetSimilarProductsServiceTest {
 
+    @Mock
     private ProductRepositoryPort repositoryMock;
+    @InjectMocks
     private GetSimilarProductsService service;
 
     @BeforeEach
-    void setup() {
-        repositoryMock = mock(ProductRepositoryPort.class);
-        service = new GetSimilarProductsService(repositoryMock);
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
+
 
     @Test
     void testExecuteReturnsProductsFlux() {

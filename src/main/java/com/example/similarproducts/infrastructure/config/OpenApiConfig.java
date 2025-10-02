@@ -14,7 +14,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("SimilarProducts API")
                         .version("1.0")
-                        .description("API para obtener productos similares")
+                        .description("API to get similar products")
 
                 );
     }
